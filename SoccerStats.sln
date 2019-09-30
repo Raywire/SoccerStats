@@ -14,4 +14,10 @@ Global
 		{731062A5-47C9-49FF-8771-E6FAB1460BA2}.Release|anycpu.ActiveCfg = Release|anycpu
 		{731062A5-47C9-49FF-8771-E6FAB1460BA2}.Release|anycpu.Build.0 = Release|anycpu
 	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = PrefixedHierarchical
+		$0.VersionControlPolicy = $2
+	EndGlobalSection
 EndGlobal
