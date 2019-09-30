@@ -9,10 +9,15 @@ namespace SoccerStats
         {
             string currentDirectory = Directory.GetCurrentDirectory();
             DirectoryInfo directory = new DirectoryInfo(currentDirectory);
-            var files = directory.GetFiles("*.txt");
-            foreach(var file in files)
+            var filename = Path.Combine(directory.FullName, "data.txt");
+            var file = new FileInfo(filename);
+            if(file.Exists)
             {
-                Console.WriteLine(file.Name);
+                using(var reader = new StreamReader(file.FullName))
+                {
+                    Console.SetIn(reader);
+                    Console.WriteLine(Console.ReadLine());
+                }
             }
         }
     }

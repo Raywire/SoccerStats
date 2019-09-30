@@ -19,5 +19,9 @@ Global
 		$0.DotNetNamingPolicy = $1
 		$1.DirectoryNamespaceAssociation = PrefixedHierarchical
 		$0.VersionControlPolicy = $2
+		$2.CommitMessageStyle = $3
+		$3.FirstFilePrefix = 
+		$3.FileSeparator = @:\n
+		$3.LineAlign = 0
 	EndGlobalSection
 EndGlobal
