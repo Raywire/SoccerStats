@@ -29,9 +29,17 @@ namespace SoccerStats
             using (var reader = new StreamReader(fileName))
             {
                 string line = "";
+                reader.ReadLine();
                 while((line = reader.ReadLine()) != null)
                 {
+                    var gameResult = new GameResult();
                     string[] values = line.Split(',');
+
+                    DateTime gameDate;
+                    if(DateTime.TryParse(values[0], out gameDate))
+                    {
+                        gameResult.GameDate = gameDate;
+                    }
                     soccerResults.Add(values);
                 }
             }
