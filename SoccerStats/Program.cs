@@ -24,7 +24,7 @@ namespace SoccerStats
             //}
             //fileName = Path.Combine(directory.FullName, "toptenplayers.json");
             //SerializePlayersToFile(topTenPlayers, fileName);
-            Console.WriteLine(getGoogleHomePage());
+            Console.WriteLine(getNewsForPlayer("Diego Valeri"));
         }
 
         public static string ReadFile(string fileName)
@@ -135,6 +135,23 @@ namespace SoccerStats
 
             using(var stream = new MemoryStream(googleHome))
             using(var reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
+            }
+        }
+
+        public static string getNewsForPlayer(string playerName)
+        {
+            var webClient = new WebClient();
+            // Add your Azure Bing Search V7 subscription key to your environment variables.
+            string accessKey = Environment.GetEnvironmentVariable("BING_SEARCH_V7_SUBSCRIPTION_KEY");
+            // Add your Azure Bing Search V7 endpoint to your environment variables.
+            string uriBase = Environment.GetEnvironmentVariable("BING_SEARCH_V7_ENDPOINT");
+            webClient.Headers.Add("Ocp-Apim-Subscription-Key", accessKey);
+            byte[] searchResults = webClient.DownloadData(string.Format("{0}/bing/v7.0/news/search?q={1}", uriBase, playerName));
+
+            using (var stream = new MemoryStream(searchResults))
+            using (var reader = new StreamReader(stream))
             {
                 return reader.ReadToEnd();
             }
