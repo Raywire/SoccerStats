@@ -9,44 +9,62 @@ namespace SoccerStats
 {
     public class NewsSearch
     {
-        [JsonProperty("Demo")]
-        public Demo Demo { get; set; }
-
-        [JsonProperty("RawJson")]
-        public string RawJson { get; set; }
-
-        [JsonProperty("QueryString")]
-        public object QueryString { get; set; }
-
-        [JsonProperty("Query")]
-        public object Query { get; set; }
-
-        [JsonProperty("Market")]
-        public string Market { get; set; }
-
-        [JsonProperty("Freshness")]
-        public object Freshness { get; set; }
-    }
-
-    public class Demo
-    {
         [JsonProperty("_type")]
         public string Type { get; set; }
 
         [JsonProperty("readLink")]
         public Uri ReadLink { get; set; }
 
+        [JsonProperty("queryContext")]
+        public QueryContext QueryContext { get; set; }
+
         [JsonProperty("totalEstimatedMatches")]
         public long TotalEstimatedMatches { get; set; }
 
+        [JsonProperty("sort")]
+        public Sort[] Sort { get; set; }
+
         [JsonProperty("value")]
-        public Value[] Value { get; set; }
+        public List<NewsResult> NewsResult { get; set; }
     }
 
-    public class Value
+    public class QueryContext
     {
-        [JsonProperty("about")]
-        public About[] About { get; set; }
+        [JsonProperty("originalQuery")]
+        public string OriginalQuery { get; set; }
+
+        [JsonProperty("adultIntent")]
+        public bool AdultIntent { get; set; }
+    }
+
+    public class Sort
+    {
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("isSelected")]
+        public bool IsSelected { get; set; }
+
+        [JsonProperty("url")]
+        public Uri Url { get; set; }
+    }
+
+    public class NewsResult
+    {
+        [JsonProperty("name")]
+        public string HeadLine { get; set; }
+
+        [JsonProperty("url")]
+        public Uri Url { get; set; }
+
+        [JsonProperty("image")]
+        public NewsResultImage Image { get; set; }
+
+        [JsonProperty("description")]
+        public string Summary { get; set; }
 
         [JsonProperty("provider")]
         public Provider[] Provider { get; set; }
@@ -54,50 +72,17 @@ namespace SoccerStats
         [JsonProperty("datePublished")]
         public DateTimeOffset DatePublished { get; set; }
 
-        [JsonProperty("clusteredArticles")]
-        public object ClusteredArticles { get; set; }
-
-        [JsonProperty("mentions")]
-        public Mention[] Mentions { get; set; }
-
-        [JsonProperty("video")]
-        public object Video { get; set; }
-
         [JsonProperty("category")]
-        public string Category { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("url")]
-        public Uri Url { get; set; }
-
-        [JsonProperty("description")]
-        public string Description { get; set; }
-
-        [JsonProperty("image")]
-        public Image Image { get; set; }
+        public Category Category { get; set; }
     }
 
-    public class About
+    public class NewsResultImage
     {
-        [JsonProperty("readLink")]
-        public Uri ReadLink { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
-    }
-
-    public class Image
-    {
-        [JsonProperty("contentUrl")]
-        public object ContentUrl { get; set; }
-
         [JsonProperty("thumbnail")]
-        public Thumbnail Thumbnail { get; set; }
+        public PurpleThumbnail Thumbnail { get; set; }
     }
 
-    public class Thumbnail
+    public class PurpleThumbnail
     {
         [JsonProperty("contentUrl")]
         public Uri ContentUrl { get; set; }
@@ -109,20 +94,53 @@ namespace SoccerStats
         public long Height { get; set; }
     }
 
-    public class Mention
-    {
-        [JsonProperty("name")]
-        public string Name { get; set; }
-    }
-
     public class Provider
     {
         [JsonProperty("_type")]
-        public string Type { get; set; }
+        public TypeEnum Type { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
+
+        [JsonProperty("image")]
+        public ProviderImage Image { get; set; }
     }
 
+    public class ProviderImage
+    {
+        [JsonProperty("thumbnail")]
+        public FluffyThumbnail Thumbnail { get; set; }
+    }
+
+    public class FluffyThumbnail
+    {
+        [JsonProperty("contentUrl")]
+        public Uri ContentUrl { get; set; }
+    }
+
+    public class Video
+    {
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("thumbnailUrl")]
+        public Uri ThumbnailUrl { get; set; }
+
+        [JsonProperty("thumbnail")]
+        public VideoThumbnail Thumbnail { get; set; }
+    }
+
+    public class VideoThumbnail
+    {
+        [JsonProperty("width")]
+        public long Width { get; set; }
+
+        [JsonProperty("height")]
+        public long Height { get; set; }
+    }
+
+    public enum Category { ScienceAndTechnology };
+
+    public enum TypeEnum { Organization };
 
 }

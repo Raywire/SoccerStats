@@ -10,21 +10,25 @@ namespace SoccerStats
     {
         public static void Main(string[] args)
         {
-            //string currentDirectory = Directory.GetCurrentDirectory();
-            //DirectoryInfo directory = new DirectoryInfo(currentDirectory);
-            //var fileName = Path.Combine(directory.FullName, "SoccerGameResults.csv");
-            //var fileContents = ReadSoccerResults(fileName);
-            //fileName = Path.Combine(directory.FullName, "players.json");
-            //var players = DeserializePlayers(fileName);
-            //var topTenPlayers = GetTopTenPlayers(players);
+            string currentDirectory = Directory.GetCurrentDirectory();
+            DirectoryInfo directory = new DirectoryInfo(currentDirectory);
+            var fileName = Path.Combine(directory.FullName, "SoccerGameResults.csv");
+            var fileContents = ReadSoccerResults(fileName);
+            fileName = Path.Combine(directory.FullName, "players.json");
+            var players = DeserializePlayers(fileName);
+            var topTenPlayers = GetTopTenPlayers(players);
 
-            //foreach (var player in topTenPlayers)
-            //{
-            //    Console.WriteLine($"Name: {player.FirstName} PPG: {player.PointsPerGame}");
-            //}
-            //fileName = Path.Combine(directory.FullName, "toptenplayers.json");
-            //SerializePlayersToFile(topTenPlayers, fileName);
-            Console.WriteLine(getNewsForPlayer("Diego Valeri"));
+            foreach (var player in topTenPlayers)
+            {
+                List<NewsResult> newsResults = getNewsForPlayer(string.Format("{0} {1}", player.FirstName, player.SecondName));
+                foreach (var result in newsResults)
+                {
+                    Console.WriteLine(string.Format("Date: {0:f}, Headline: {1}, Summary: {2} \r\n", result.DatePublished, result.HeadLine, result.Summary));
+                    Console.ReadKey();
+                }
+            }
+            fileName = Path.Combine(directory.FullName, "toptenplayers.json");
+            SerializePlayersToFile(topTenPlayers, fileName);
         }
 
         public static string ReadFile(string fileName)
@@ -140,21 +144,24 @@ namespace SoccerStats
             }
         }
 
-        public static string getNewsForPlayer(string playerName)
+        public static List<NewsResult> getNewsForPlayer(string playerName)
         {
+            var results = new List<NewsResult>();
             var webClient = new WebClient();
             // Add your Azure Bing Search V7 subscription key to your environment variables.
             string accessKey = Environment.GetEnvironmentVariable("BING_SEARCH_V7_SUBSCRIPTION_KEY");
             // Add your Azure Bing Search V7 endpoint to your environment variables.
             string uriBase = Environment.GetEnvironmentVariable("BING_SEARCH_V7_ENDPOINT");
             webClient.Headers.Add("Ocp-Apim-Subscription-Key", accessKey);
-            byte[] searchResults = webClient.DownloadData(string.Format("{0}/bing/v7.0/news/search?q={1}", uriBase, playerName));
-
+            byte[] searchResults = webClient.DownloadData(string.Format("{0}/news/search?q={1}", uriBase, playerName));
+            var serializer = new JsonSerializer();
             using (var stream = new MemoryStream(searchResults))
             using (var reader = new StreamReader(stream))
+            using(var jsonReader = new JsonTextReader(reader))
             {
-                return reader.ReadToEnd();
+                results = serializer.Deserialize<NewsSearch>(jsonReader).NewsResult;
             }
+            return results;
         }
     }
 }
