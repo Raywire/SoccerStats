@@ -74,6 +74,8 @@ namespace SoccerStats
 
         [JsonProperty("category")]
         public Category Category { get; set; }
+
+        public double SentimentScore { get; set; }
     }
 
     public class NewsResultImage
