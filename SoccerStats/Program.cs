@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using Newtonsoft.Json;
 
 namespace SoccerStats
@@ -9,20 +10,21 @@ namespace SoccerStats
     {
         public static void Main(string[] args)
         {
-            string currentDirectory = Directory.GetCurrentDirectory();
-            DirectoryInfo directory = new DirectoryInfo(currentDirectory);
-            var fileName = Path.Combine(directory.FullName, "SoccerGameResults.csv");
-            var fileContents = ReadSoccerResults(fileName);
-            fileName = Path.Combine(directory.FullName, "players.json");
-            var players = DeserializePlayers(fileName);
-            var topTenPlayers = GetTopTenPlayers(players);
+            //string currentDirectory = Directory.GetCurrentDirectory();
+            //DirectoryInfo directory = new DirectoryInfo(currentDirectory);
+            //var fileName = Path.Combine(directory.FullName, "SoccerGameResults.csv");
+            //var fileContents = ReadSoccerResults(fileName);
+            //fileName = Path.Combine(directory.FullName, "players.json");
+            //var players = DeserializePlayers(fileName);
+            //var topTenPlayers = GetTopTenPlayers(players);
 
-            foreach (var player in topTenPlayers)
-            {
-                Console.WriteLine($"Name: {player.FirstName} PPG: {player.PointsPerGame}");
-            }
-            fileName = Path.Combine(directory.FullName, "toptenplayers.json");
-            SerializePlayersToFile(topTenPlayers, fileName);
+            //foreach (var player in topTenPlayers)
+            //{
+            //    Console.WriteLine($"Name: {player.FirstName} PPG: {player.PointsPerGame}");
+            //}
+            //fileName = Path.Combine(directory.FullName, "toptenplayers.json");
+            //SerializePlayersToFile(topTenPlayers, fileName);
+            Console.WriteLine(getGoogleHomePage());
         }
 
         public static string ReadFile(string fileName)
@@ -123,6 +125,18 @@ namespace SoccerStats
             using (var jsonWriter = new JsonTextWriter(writer))
             {
                 serializer.Serialize(jsonWriter, players);
+            }
+        }
+
+        public static string getGoogleHomePage()
+        {
+            var webClient = new WebClient();
+            byte[] googleHome = webClient.DownloadData("https://www.google.com");
+
+            using(var stream = new MemoryStream(googleHome))
+            using(var reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
             }
         }
     }
